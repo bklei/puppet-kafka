@@ -9,7 +9,8 @@
 #
 class kafka::broker::service(
   $service_install = $kafka::broker::service_install,
-  $service_ensure  = $kafka::broker::service_ensure
+  $service_ensure  = $kafka::broker::service_ensure,
+  $service_user = 'kafka',
 ) {
 
   if $caller_module_name != $module_name {

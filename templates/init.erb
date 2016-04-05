@@ -8,7 +8,7 @@
 
 NAME=kafka
 PID_FILE=/var/run/$NAME.pid
-KAFKA_USER=kafka
+KAFKA_USER=<%= @service_user %>
 
 DAEMON="/opt/kafka/bin/kafka-server-start.sh"
 DAEMON_OPTS="/opt/kafka/config/server.properties"
