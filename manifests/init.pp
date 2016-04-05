@@ -126,6 +126,7 @@ class kafka (
     target           => $install_directory,
     url              => $package_url,
     user             => 'kafka',
+    root_dir         => '.',
     require          => [
       File[$package_dir],
       File[$install_directory],
