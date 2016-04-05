@@ -85,20 +85,9 @@ class kafka (
     ],
   }
 
-  file { $install_directory:
-    ensure  => directory,
-    owner   => 'kafka',
-    group   => 'kafka',
-    require => [
-      Group['kafka'],
-      User['kafka'],
-    ],
-  }
-
   file { '/opt/kafka':
     ensure  => link,
     target  => $install_directory,
-    require => File[$install_directory],
   }
 
   file { '/opt/kafka/config':
@@ -125,11 +114,10 @@ class kafka (
     strip_components => 1,
     target           => $install_directory,
     url              => $package_url,
-    user             => 'kafka',
-    root_dir         => '.',
+    user             => 'root',
+    root_dir         => '/',
     require          => [
       File[$package_dir],
-      File[$install_directory],
       Group['kafka'],
       User['kafka'],
     ],
