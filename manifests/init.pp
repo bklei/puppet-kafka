@@ -85,9 +85,20 @@ class kafka (
     ],
   }
 
+  file { $install_directory:
+    ensure  => directory,
+    owner   => 'kafka',
+    group   => 'kafka',
+    require => [
+      Group['kafka'],
+      User['kafka'],
+    ],
+  }
+
   file { '/opt/kafka':
     ensure  => link,
     target  => $install_directory,
+    require => File[$install_directory],
   }
 
   file { '/opt/kafka/config':
@@ -107,17 +118,21 @@ class kafka (
     ],
   }
 
+  include '::archive'
+
   archive { "${package_dir}/${basefilename}":
-    checksum         => false,
-    ensure           => present,
-    src_target       => '/',
-    strip_components => 1,
-    target           => $install_directory,
-    url              => $package_url,
-    user             => 'root',
-    root_dir         => '/',
-    require          => [
+    ensure          => present,
+    extract         => true,
+    extract_command => 'tar xfz %s --strip-components=1',
+    extract_path    => $install_directory,
+    source          => $package_url,
+    creates         => "${install_directory}/config",
+    cleanup         => true,
+    user            => 'kafka',
+    group           => 'kafka',
+    require         => [
       File[$package_dir],
+      File[$install_directory],
       Group['kafka'],
       User['kafka'],
     ],
